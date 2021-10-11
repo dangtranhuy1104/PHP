@@ -1,91 +1,75 @@
 <?php
-//Initialize the session
-session_start();
-
-//check if the user is already logged im. if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: welcome_demo.php");
+	session_start();
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"]=== true){
+    header("location: dashboard.php");
     exit;
 }
 
-//Include config file
-require_once "config_demo.php";
+//require_once ("config_demo.php");
+define('DB_SERVER','localhost');
+define('DB_USERNAME','root');
+define('DB_PASSWORD','');
+define('DB_NAME','test01');
 
-//define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = $login_err = "";
+$mysqli=new mysqli(DB_SERVER,DB_USERNAME,DB_PASSWORD,DB_NAME);
 
-//processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+//check connection
 
-    //check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
-    }else{
+if($mysqli === false){
+    die("ERROR:Could not connect.". $mysqli->connect_error);
+}
+
+
+$username =  $password =  "";
+$username_err =  $password_err =  $login_err = "";
+
+if($_SERVER["REQUEST_METHOD"]=="POST") {
+    if (empty(trim($_POST["username"]))) {
+        //check ig username is empty
+        $username_err = "please enter username.";
+    } else {
         $username = trim($_POST["username"]);
     }
 
-//check if password is empty
-    if(empty(trim($_POST["password"]))){
+    if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter your password.";
-    } else{
+    } else {
         $password = trim($_POST["password"]);
     }
 
-//validate credentials
-    if(empty($username_err) && empty($password_err)){
-        //prepare a select statement
-        $sql = "SELECT id, username, password FROM user1 WHERE username = ?";
+    if (empty($username_err) && empty($password_err)) {
+        $sql = "SELECT id ,username,password FROM users2 WHERE username =  ?";
 
-        if($stmt = $mysqli->prepare($sql)){
-            //bind variables to the prepared statement as parameters
+        if ($stmt = $mysqli->prepare($sql)) {
             $stmt->bind_param("s", $param_username);
-
-            //set parameters
             $param_username = $username;
-
-            //attempt to execute the prepared statement
-            if($stmt->execute()){
-                //store result
+            if ($stmt->execute()) {
                 $stmt->store_result();
-
-                //check if username exists, if yes then verify password
-                if($stmt->num_rows == 1){
-                    //bind result variables
+                if ($stmt->num_rows == 1) {
                     $stmt->bind_result($id, $username, $hashed_password);
-                    if($stmt->fetch()){
-                        if(password_verify($password, $hashed_password)){
-                            //password is correct, so start a new session
-                            session_start();
+                    if ($stmt->fetch()) {
+                        if (password_verify($password, $hashed_password)) {
+                            $_SESSION['loggedin'] = true;
+                            $_SESSION['id'] = $id;
+                            $_SESSION['username'] = $username;
 
-                            //store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;
-
-                            //redirect user to welcome page
-                            header("location: welcome_demo.php");
-                        } else{
-                            //password is not valid, display a generic error message
-                            $login_err = "Invalid username of password.";
+                            header("localtion: dashboard.php");
+                        } else {
+                            $login_err = "Incalid username of password";
                         }
                     }
-                }else{
-                    //username doesn't exist, display a generic error message
-                    $login_err = "Invalid username or password.";
+                } else {
+                    $login_err = "Incalid username of password";
                 }
-            }else{
-                echo "Oops! Something went wrong. Please try again later.";
+            } else {
+                echo "Oops! Something went wrong.Please try again later.";
             }
-
-            //Close statement
             $stmt->close();
         }
-    }
 
-//close connectionn
-    $mysqli->close();
+    }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,7 +101,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </div>
         <div class="form-group">
             <label>Password</label>
-            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
+            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password;?>">
             <span class="invalid-feedback"><?php echo $password_err; ?></span>
         </div>
         <div class="form-group">
