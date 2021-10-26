@@ -79,7 +79,6 @@
                                  echo "<thead>";
                                  echo "<tr>";
                                  echo "<th>Book_ID</th>";
-                                  echo "<th>Name</th>";
                                  echo "<th>AuthorID</th>";
                                  echo "<th>Title</th>";
                                  echo "<th>Pub Year</th>";
@@ -94,7 +93,7 @@
                                      echo "<td>" . $row['title'] . "</td>";
                                      echo "<td>" . $row['ISBN'] . "</td>";
                                      echo "<td>" . $row['pub_year']  . "</td>";
-                                     echo "<td>" . $row['availbale'] . "</td>";
+                                     echo "<td>" . $row['available'] . "</td>";
                                      //echo "<td>";
                                      //echo '<a href="read.php?id=' . $row['bookid'] . '" class="mr-3"
                                        //          title="View Recound" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
