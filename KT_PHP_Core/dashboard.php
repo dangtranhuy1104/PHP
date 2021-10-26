@@ -67,9 +67,9 @@
 
                         $keyword=$_GET["key"];
 
-                    $sql="select * from book where name ='%$keyword%' or title like '%$keyword%' or authorid like '%$keyword%'";
+                    $sql="select * from ThuVien where name ='%$keyword%' or title like '%$keyword%' or authorid like '%$keyword%'";
                 }else {
-                    $sql = "select * from book";
+                    $sql = "select * from ThuVien";
                 }
 
 
@@ -90,20 +90,19 @@
                                  while ($row = $result->fetch_array()) {
                                      echo "<tr>";
                                      echo "<td>" . $row['bookid'] . "</td>";
-                                     echo "<td>" . $row['name']  . "</td>";
                                      echo "<td>" . $row['authorid'] . "</td>";
                                      echo "<td>" . $row['title'] . "</td>";
-                                    
+                                     echo "<td>" . $row['ISBN'] . "</td>";
                                      echo "<td>" . $row['pub_year']  . "</td>";
                                      echo "<td>" . $row['availbale'] . "</td>";
-                                     echo "<td>";
-                                     echo '<a href="read.php?id=' . $row['bookid'] . '" class="mr-3"
-                                                 title="View Recound" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
-                                     echo '<a href="update.php?id=' . $row['bookid'] . '" class="mr-3"
-                                                 title="Update Recound" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>';
-                                     echo '<a href="delete.php?id=' . $row['bookid'] . '"
-                                                 title="Delete Recound" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
-                                     echo "</td>";
+                                     //echo "<td>";
+                                     //echo '<a href="read.php?id=' . $row['bookid'] . '" class="mr-3"
+                                       //          title="View Recound" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
+                                     //echo '<a href="update.php?id=' . $row['bookid'] . '" class="mr-3"
+                                      //           title="Update Recound" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>';
+                                    // echo '<a href="delete.php?id=' . $row['bookid'] . '"
+                                        //         title="Delete Recound" data-toggle="tooltip"><span class="fa fa-trash"></span></a>';
+                                     //echo "</td>";
                                      echo "</tr>";
                                  }
                                  echo "</tbody>";
