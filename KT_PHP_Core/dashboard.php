@@ -50,11 +50,11 @@
                            <?php if(isset($_GET["key"])) {echo $_GET["key"];}?>">
 
                             <input type="submit" value="search" class="btn btn-success pull-center">
-                            <a href="dashboard.php" class="btn btn-success" >Display All</a>
+
 
                        </form>
                     </div>
-                    <a href="create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i>Add New Book</a>
+           
                 </div>
 
                 <?php
